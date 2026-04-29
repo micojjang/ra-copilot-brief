@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Medical RA Copilot — M사 × 산학협력 프로젝트</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #F7F5F0;
+  --bg2: #EFECE5;
+  --ink: #1A1916;
+  --ink2: #6B6760;
+  --ink3: #A8A49E;
+  --accent: #1B4FD8;
+  --accent2: #0F3299;
+  --accent-bg: #EBF0FF;
+  --green: #1A6B3C;
+  --green-bg: #E8F5EE;
+  --amber: #8B5E00;
+  --amber-bg: #FFF3D6;
+  --red: #B83232;
+  --red-bg: #FDECEA;
+  --border: rgba(26,25,22,0.10);
+  --border2: rgba(26,25,22,0.06);
+  --r: 12px;
+  --r-sm: 6px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:'Instrument Sans',sans-serif;background:var(--bg);color:var(--ink);font-size:16px;line-height:1.7;-webkit-font-smoothing:antialiased;}
+
+nav{position:sticky;top:0;z-index:100;background:rgba(247,245,240,0.93);backdrop-filter:blur(14px);border-bottom:1px solid var(--border);padding:0 6vw;display:flex;align-items:center;justify-content:space-between;height:56px;}
+.nav-logo{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--ink2);letter-spacing:0.04em;}
+.nav-links{display:flex;gap:28px;list-style:none;}
+.nav-links a{font-size:13px;color:var(--ink2);text-decoration:none;transition:color 0.2s;}
+.nav-links a:hover{color:var(--ink);}
+
+.wrap{max-width:840px;margin:0 auto;padding:0 6vw;}
+section{padding:88px 0;border-top:1px solid var(--border2);}
+
+.hero{padding:108px 0 92px;}
+.eyebrow{display:inline-flex;align-items:center;gap:10px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--accent);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:28px;opacity:0;animation:up 0.6s ease forwards 0.1s;}
+.eyebrow::before{content:'';width:24px;height:1px;background:var(--accent);}
+
+/* ★ 히어로 타이틀 수정 */
+.hero-h1{font-family:'DM Serif Display',serif;font-size:clamp(40px,6.5vw,68px);font-weight:400;line-height:1.1;letter-spacing:-0.02em;margin-bottom:28px;opacity:0;animation:up 0.6s ease forwards 0.2s;}
+.hero-h1 em{font-style:italic;color:var(--accent);}
+
+/* ★ 히어로 서브카피 수정 */
+.hero-sub{font-size:17px;color:var(--ink2);line-height:1.8;max-width:560px;margin-bottom:36px;opacity:0;animation:up 0.6s ease forwards 0.3s;}
+
+.tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:44px;opacity:0;animation:up 0.6s ease forwards 0.4s;}
+.tag{font-family:'JetBrains Mono',monospace;font-size:11px;padding:4px 10px;border-radius:4px;border:1px solid var(--border);color:var(--ink2);background:var(--bg2);}
+.tag.hi{background:var(--accent-bg);border-color:rgba(27,79,216,0.2);color:var(--accent);}
+
+.cta{display:flex;gap:12px;flex-wrap:wrap;opacity:0;animation:up 0.6s ease forwards 0.5s;}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:12px 24px;border-radius:var(--r-sm);font-size:14px;font-weight:600;text-decoration:none;transition:all 0.2s;cursor:pointer;border:none;}
+.btn-p{background:var(--accent);color:#fff;}
+.btn-p:hover{background:var(--accent2);transform:translateY(-1px);}
+.btn-s{background:transparent;color:var(--ink);border:1px solid var(--border);}
+.btn-s:hover{background:var(--bg2);}
+
+.sh{display:flex;align-items:baseline;gap:16px;margin-bottom:40px;}
+.sh-n{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--ink3);letter-spacing:0.05em;flex-shrink:0;}
+.sh-t{font-family:'DM Serif Display',serif;font-size:30px;font-weight:400;line-height:1.2;letter-spacing:-0.01em;}
+
+.grid4{display:grid;grid-template-columns:repeat(auto-fit,minmax(175px,1fr));gap:12px;}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+@media(max-width:600px){.grid2{grid-template-columns:1fr;}}
+
+.card{background:#fff;border:1px solid var(--border);border-radius:var(--r);padding:22px;transition:transform 0.2s,box-shadow 0.2s;}
+.card:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(0,0,0,0.06);}
+.card-lbl{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--ink3);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:8px;}
+.card-t{font-size:14px;font-weight:600;margin-bottom:7px;}
+.card-d{font-size:13px;color:var(--ink2);line-height:1.6;}
+.card-stat{margin-top:12px;font-family:'DM Serif Display',serif;font-size:24px;color:var(--accent);}
+
+.ra-box{background:var(--accent-bg);border:1px solid rgba(27,79,216,0.15);border-radius:var(--r);padding:30px 32px;margin-bottom:28px;}
+.ra-box-label{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--accent);letter-spacing:0.06em;margin-bottom:10px;}
+.ra-box p{font-size:15px;color:var(--ink);line-height:1.8;}
+
+.flow{display:flex;align-items:center;flex-wrap:wrap;gap:0;margin-top:24px;}
+.flow-item{display:flex;flex-direction:column;align-items:center;gap:5px;}
+.flow-dot{width:34px;height:34px;border-radius:50%;background:var(--accent);color:#fff;font-size:11px;font-weight:600;display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;}
+.flow-dot.dim{background:var(--bg2);color:var(--ink2);border:1px solid var(--border);}
+.flow-lbl{font-size:11px;color:var(--ink2);text-align:center;max-width:68px;line-height:1.3;}
+.flow-arr{color:var(--ink3);font-size:14px;padding:0 6px;padding-bottom:20px;}
+
+.terms{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:8px;margin-top:20px;}
+.term{background:#fff;border:1px solid var(--border);border-radius:var(--r-sm);padding:12px 14px;}
+.term-k{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--accent);font-weight:500;margin-bottom:2px;}
+.term-v{font-size:12px;color:var(--ink2);}
+
+.compare{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+@media(max-width:600px){.compare{grid-template-columns:1fr;}}
+.cmp{border-radius:var(--r);padding:26px;border:1px solid var(--border);}
+.cmp.bad{background:var(--red-bg);border-color:rgba(184,50,50,0.15);}
+.cmp.good{background:var(--green-bg);border-color:rgba(26,107,60,0.15);}
+.cmp h3{font-size:12px;font-weight:600;letter-spacing:0.04em;margin-bottom:16px;}
+.cmp.bad h3{color:var(--red);}
+.cmp.good h3{color:var(--green);}
+.cmp ul{list-style:none;display:flex;flex-direction:column;gap:9px;}
+.cmp ul li{font-size:13px;display:flex;gap:8px;align-items:flex-start;}
+.cmp.bad ul li::before{content:'✕';color:var(--red);flex-shrink:0;font-size:12px;margin-top:2px;}
+.cmp.good ul li::before{content:'✓';color:var(--green);flex-shrink:0;font-size:12px;margin-top:2px;}
+
+.dlv-list{display:flex;flex-direction:column;gap:14px;}
+.dlv{background:#fff;border:1px solid var(--border);border-radius:var(--r);padding:26px 28px;display:grid;grid-template-columns:56px 1fr;gap:20px;align-items:start;transition:border-color 0.2s,transform 0.2s;}
+.dlv:hover{border-color:rgba(27,79,216,0.25);transform:translateX(4px);}
+.dlv-n{font-family:'DM Serif Display',serif;font-size:40px;color:var(--border);line-height:1;}
+.dlv-t{font-size:16px;font-weight:600;margin-bottom:6px;}
+.dlv-d{font-size:13px;color:var(--ink2);line-height:1.65;margin-bottom:12px;}
+.dtags{display:flex;flex-wrap:wrap;gap:6px;}
+.dtag{font-family:'JetBrains Mono',monospace;font-size:10px;padding:3px 8px;border-radius:3px;background:var(--bg2);color:var(--ink2);border:1px solid var(--border);}
+
+.define-hero{background:var(--ink);border-radius:var(--r);padding:44px 40px;margin-bottom:28px;}
+.define-hero h3{font-family:'DM Serif Display',serif;font-size:24px;font-weight:400;color:#fff;line-height:1.3;margin-bottom:12px;}
+.define-hero p{font-size:14px;color:rgba(255,255,255,0.6);line-height:1.8;max-width:520px;}
+
+.col-card{border:1px solid var(--border);border-radius:var(--r);padding:24px;background:#fff;}
+.col-card h4{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:500;color:var(--ink3);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:14px;}
+.col-card ul{list-style:none;display:flex;flex-direction:column;gap:8px;}
+.col-card ul li{font-size:13px;display:flex;gap:8px;align-items:flex-start;color:var(--ink2);}
+.col-card ul li::before{content:'→';color:var(--ink3);flex-shrink:0;}
+.col-card.hi{border-color:rgba(27,79,216,0.2);background:var(--accent-bg);}
+.col-card.hi h4{color:var(--accent);}
+.col-card.hi ul li{color:var(--ink);}
+
+.tl{display:flex;flex-direction:column;position:relative;}
+.tl::before{content:'';position:absolute;left:34px;top:24px;bottom:24px;width:1px;background:var(--border);}
+.tl-row{display:grid;grid-template-columns:68px 1fr;gap:24px;padding:20px 0;position:relative;}
+.tl-week{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--ink3);text-align:right;padding-top:2px;position:relative;}
+.tl-week::after{content:'';position:absolute;right:-16px;top:6px;width:10px;height:10px;border-radius:50%;background:var(--bg2);border:2px solid var(--border);}
+.tl-row.on .tl-week::after{background:var(--accent);border-color:var(--accent);}
+.tl-t{font-size:15px;font-weight:600;margin-bottom:4px;}
+.tl-d{font-size:13px;color:var(--ink2);line-height:1.6;}
+
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;}
+.kpi{background:#fff;border:1px solid var(--border);border-radius:var(--r);padding:20px;text-align:center;}
+.kpi-n{font-family:'DM Serif Display',serif;font-size:34px;color:var(--accent);line-height:1;margin-bottom:6px;}
+.kpi-l{font-size:12px;color:var(--ink2);line-height:1.5;}
+
+.hn{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:28px;}
+@media(max-width:600px){.hn{grid-template-columns:1fr;}}
+.hn-c{border:1px solid var(--border);border-radius:var(--r);padding:24px;}
+.hn-c.have{background:var(--bg2);}
+.hn-c.need{background:#fff;border-color:rgba(27,79,216,0.2);}
+.hn-lbl{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:500;letter-spacing:0.07em;text-transform:uppercase;margin-bottom:14px;}
+.have .hn-lbl{color:var(--ink3);}
+.need .hn-lbl{color:var(--accent);}
+.hn-c ul{list-style:none;display:flex;flex-direction:column;gap:8px;}
+.hn-c ul li{font-size:13px;display:flex;gap:8px;align-items:flex-start;}
+.have ul li::before{content:'✓';color:var(--green);flex-shrink:0;}
+.need ul li::before{content:'○';color:var(--accent);flex-shrink:0;}
+
+.roles{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;}
+.role{background:#fff;border:1px solid var(--border);border-radius:var(--r);padding:20px;transition:border-color 0.2s,transform 0.2s;}
+.role:hover{border-color:rgba(27,79,216,0.3);transform:translateY(-2px);}
+.role.on{border-color:rgba(27,79,216,0.3);background:var(--accent-bg);}
+.rbadge{font-family:'JetBrains Mono',monospace;font-size:10px;padding:3px 8px;border-radius:3px;display:inline-block;margin-bottom:10px;font-weight:500;}
+.role.on .rbadge{background:var(--accent);color:#fff;}
+.role:not(.on) .rbadge{background:var(--amber-bg);color:var(--amber);border:1px solid rgba(139,94,0,0.2);}
+.role-t{font-size:14px;font-weight:600;margin-bottom:6px;}
+.role-d{font-size:12px;color:var(--ink2);line-height:1.6;}
+
+.ops{display:grid;grid-template-columns:repeat(auto-fit,minmax(175px,1fr));gap:10px;margin-top:20px;}
+.op{background:#fff;border:1px solid var(--border);border-radius:var(--r-sm);padding:16px;}
+.op-t{font-size:13px;font-weight:600;margin-bottom:4px;}
+.op-d{font-size:12px;color:var(--ink2);line-height:1.5;}
+
+.closing{background:var(--ink);border-radius:var(--r);padding:64px 48px;text-align:center;}
+.closing-t{font-family:'DM Serif Display',serif;font-size:clamp(26px,4vw,40px);font-weight:400;color:#fff;line-height:1.3;margin-bottom:20px;}
+.closing-t em{font-style:italic;color:rgba(255,255,255,0.45);}
+.closing-sub{font-size:15px;color:rgba(255,255,255,0.5);line-height:1.8;max-width:480px;margin:0 auto 36px;}
+.closing-btn{display:inline-flex;align-items:center;gap:8px;padding:14px 32px;background:#fff;color:var(--ink);border-radius:var(--r-sm);font-size:15px;font-weight:600;text-decoration:none;transition:all 0.2s;}
+.closing-btn:hover{background:var(--accent);color:#fff;transform:translateY(-2px);}
+
+footer{border-top:1px solid var(--border);padding:28px 6vw;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;}
+footer span{font-size:11px;color:var(--ink3);font-family:'JetBrains Mono',monospace;}
+
+@keyframes up{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:translateY(0);}}
+.fi{opacity:0;transform:translateY(12px);transition:opacity 0.55s ease,transform 0.55s ease;}
+.fi.on{opacity:1;transform:translateY(0);}
+
+@media(max-width:768px){
+  .nav-links{display:none;}
+  section{padding:60px 0;}
+  .hero{padding:68px 0 60px;}
+  .dlv{grid-template-columns:1fr;}
+  .dlv-n{display:none;}
+  .closing{padding:44px 24px;}
+  .define-hero{padding:32px 24px;}
+}
+</style>
+</head>
+<body>
+
+<!-- ★ NAV 링크 수정 여기 -->
+<nav>
+  <span class="nav-logo">RA · Copilot · Project</span>
+  <ul class="nav-links">
+    <li><a href="#problem">문제</a></li>
+    <li><a href="#domain">도메인</a></li>
+    <li><a href="#vision">비전</a></li>
+    <li><a href="#deliverables">산출물</a></li>
+    <li><a href="#define">문제 정의</a></li>
+    <li><a href="#roadmap">로드맵</a></li>
+    <li><a href="#team">팀 모집</a></li>
+  </ul>
+</nav>
+
+<!-- ★ HERO — 타이틀·서브카피·태그 수정 여기 -->
+<div class="hero">
+  <div class="wrap">
+    <p class="eyebrow">M사 × 연세대학교 창업학회 산학협력</p>
+    <h1 class="hero-h1">
+      의료기기 인허가,<br>
+      <em>직접 바꿉니다.</em>
+    </h1>
+    <p class="hero-sub">
+      실제 의료기기 제조사(M사)의 CE·MDR 인증 현장을 기반으로,
+      RA(인허가) 담당자가 더 빠르고 정확하게 일할 수 있는 시스템을 납품합니다.
+      의공학 전공자가 도메인을 직접 정의하고, 실제 클라이언트와 함께 만듭니다.
+    </p>
+    <div class="tags">
+      <span class="tag hi">Real Client</span>
+      <span class="tag hi">500만원 확정 예산</span>
+      <span class="tag hi">8주 납품</span>
+      <span class="tag">CE / MDR</span>
+      <span class="tag">RAG Pipeline</span>
+      <span class="tag">AI Agent</span>
+      <span class="tag">의공학 도메인</span>
+      <span class="tag">B2B MVP</span>
+    </div>
+    <div class="cta">
+      <a href="#team" class="btn btn-p">팀 합류 문의하기 →</a>
+      <a href="#deliverables" class="btn btn-s">산출물 보기</a>
+    </div>
+  </div>
+</div>
+
+<!-- ★ 01 — 문제 인식 카드 수정 여기 -->
+<section id="problem">
+  <div class="wrap">
+    <div class="sh fi">
+      <span class="sh-n">01</span>
+      <h2 class="sh-t">왜 의료기기 인증은<br>아직도 이렇게 힘든가</h2>
+    </div>
+    <p class="fi" style="color:var(--ink2);margin-bottom:32px;font-size:15px;line-height:1.8;">
+      한국에는 의료기기 제조사가 수천 곳 있습니다. 이들이 유럽이나 국내 시장에 제품을 내놓으려면
+      복잡한 인허가 절차를 반드시 통과해야 합니다.
+      문제는 이 과정이 <strong>여전히 사람의 기억과 수작업에 의존</strong>한다는 점입니다.
+    </p>
+    <div class="grid4 fi">
+      <div class="card">
+        <div class="card-lbl">Pain 01</div>
+        <div class="card-t">진행 현황 파편화</div>
+        <div class="card-d">어느 문서가 최신인지, 누가 무엇을 담당하는지 한눈에 보기 어렵습니다.</div>
+        <div class="card-stat">버전 혼란</div>
+      </div>
+      <div class="card">
+        <div class="card-lbl">Pain 02</div>
+        <div class="card-t">규제 검색 반복</div>
+        <div class="card-d">같은 MDR 규정을 매번 다시 찾습니다. 연 10회 이상 개정이 있어도 놓치기 쉽습니다.</div>
+        <div class="card-stat">연 10회+ 개정</div>
+      </div>
+      <div class="card">
+        <div class="card-lbl">Pain 03</div>
+        <div class="card-t">문서 초안 수작업</div>
+        <div class="card-d">기술문서·CER·보완 대응서를 매번 처음부터 작성합니다. AI가 가장 잘할 수 있는 일입니다.</div>
+        <div class="card-stat">초안 2~4주</div>
+      </div>
+      <div class="card">
+        <div class="card-lbl">Pain 04</div>
+        <div class="card-t">인수인계 취약</div>
+        <div class="card-d">담당자가 바뀌면 지식이 함께 사라집니다. 지식 자산화가 전혀 되어 있지 않습니다.</div>
+        <div class="card-stat">매번 재시작</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ★ 02 — RA 도메인 설명 수정 여기 -->
+<section id="domain">
+  <div class="wrap">
+    <div class="sh fi">
+      <span class="sh-n">02</span>
+      <h2 class="sh-t">RA가 뭔지<br>처음 듣는 분을 위해</h2>
+    </div>
+
+    <div class="ra-box fi">
+      <div class="ra-box-label">// RA = Regulatory Affairs (인허가 업무)</div>
+      <p>
+        의료기기는 일반 제품과 달리, 시장에 출시하기 전에 반드시 각국 규제 기관의
+        <strong>인허가(승인)</strong>를 받아야 합니다. 유럽에서 팔려면 <strong>CE 인증</strong>,
+        한국에서는 <strong>식약처 인허가</strong>가 필요합니다.
+        이 인허가 과정 전체를 담당하는 업무를 <strong>RA(Regulatory Affairs)</strong>라고 부릅니다.
+        보험 약관이 200페이지인 것처럼, 의료기기 규제 문서도 수천 페이지에 달합니다.
+        그리고 그걸 읽고 해석하고 서류를 만드는 일은, 지금도 사람이 수작업으로 하고 있습니다.
+      </p>
+    </div>
+
+    <p class="fi" style="font-size:13px;color:var(--ink2);margin-bottom:14px;">CE 인증 핵심 절차 — M사가 통과해야 하는 과정</p>
+    <div class="flow fi">
+      <div class="flow-item"><div class="flow-dot">01</div><div class="flow-lbl">기술문서 작성</div></div>
+      <span class="flow-arr">→</span>
+      <div class="flow-item"><div class="flow-dot">02</div><div class="flow-lbl">CER 임상평가</div></div>
+      <span class="flow-arr">→</span>
+      <div class="flow-item"><div class="flow-dot">03</div><div class="flow-lbl">NB 심사</div></div>
+      <span class="flow-arr">→</span>
+      <div class="flow-item"><div class="flow-dot">04</div><div class="flow-lbl">인증서 발급</div></div>
+      <span class="flow-arr">→</span>
+      <div class="flow-item"><div class="flow-dot dim">05</div><div class="flow-lbl">PMS 사후관리</div></div>
+    </div>
+
+    <div class="terms fi">
+      <div class="term"><div class="term-k">CE 인증</div><div class="term-v">유럽 시장 진입 필수 인증. Class 1~3으로 위험도 분류.</div></div>
+      <div class="term"><div class="term-k">MDR</div><div class="term-v">EU 의료기기 규정. 2021년 시행, 수천 페이지 규제 문서.</div></div>
+      <div class="term"><div class="term-k">기술문서 (TD)</div><div class="term-v">제품의 안전성·성능을 증명하는 핵심 제출 서류.</div></div>
+      <div class="term"><div class="term-k">CER</div><div class="term-v">임상평가 보고서. 해당 의료기기의 임상적 근거를 정리한 문서.</div></div>
+      <div class="term"><div class="term-k">NB</div><div class="term-v">Notified Body. 유럽 CE 인증을 심사하는 공인 기관.</div></div>
+      <div class="term"><div class="term-k">PMS</div><div class="term-v">Post-Market Surveillance. 인증 후 제품 이상 사례 추적 관리.</div></div>
+      <div class="term"><div class="term-k">Gap Analysis</div><div class="term-v">현재 문서와 규제 요건을 비교해 미충족 항목을 찾는 작업.</div></div>
+      <div class="term"><div class="term-k">RAG</div><div class="term-v">검색 증강 생성. 실제 문서를 기반으로 AI가 답변하는 기술.</div></div>
+    </div>
+
+    <div class="fi" style="margin-top:24px;padding:22px 24px;background:#fff;border:1px solid var(--border);border-radius:var(--r);">
+      <p style="font-size:13px;color:var(--ink2);line-height:1.8;">
+        <strong style="color:var(--ink);">왜 지금 AI인가.</strong>
+        RA 업무의 핵심은 방대한 규제 문서를 읽고 해석하고, 그에 맞는 서류를 생성하는 것입니다.
+        이는 LLM이 가장 잘하는 일입니다. RAG 기술을 활용하면 규제 원문을 기반으로 정확한 답변을 생성할 수 있고,
+        환각(hallucination)을 최소화할 수 있습니다. 보험 분야에서 AI 에이전트가
+        정보 비대칭을 해소했듯, RA 분야에서도 같은 일이 가능합니다.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ★ 03 — AS-IS / TO-BE 수정 여기 -->
+<section id="vision">
+  <div class="wrap">
+    <div class="sh fi">
+      <span class="sh-n">03</span>
+      <h2 class="sh-t">이 프로젝트가<br>만들어낼 변화</h2>
+    </div>
+    <p class="fi" style="color:var(--ink2);margin-bottom:28px;font-size:15px;line-height:1.8;">
+      RA 전문가를 대체하는 것이 목표가 아닙니다.
+      RA 전문가가 <strong>더 빠르고 정확하게 일하도록</strong> 만드는 시스템이 목표입니다.
+    </p>
+    <div class="compare fi">
+      <div class="cmp bad">
+        <h3>현재 (AS-IS)</h3>
+        <ul>
+          <li>규제 원문 수동 검색·해석 (일 단위 소요)</li>
+          <li>기술문서 초안 수작업 (주 단위 소요)</li>
+          <li>버전 관리 실패, 최신 문서 파악 어려움</li>
+          <li>규제 개정 수동 모니터링, 누락 위험</li>
+          <li>담당자 교체 시 지식 전체 소실</li>
+          <li>경영자가 인증 현황 파악 불가</li>
+        </ul>
+      </div>
+      <div class="cmp good">
+        <h3>목표 (TO-BE)</h3>
+        <ul>
+          <li>자연어 질의로 규제 해석 (초 단위)</li>
+          <li>AI가 기술문서 초안 생성 (시간 단위)</li>
+          <li>문서 상태·버전 실시간 추적</li>
+          <li>규제 개정 자동 모니터링·알림</li>
+          <li>지식 자산화로 인수인계 체계 구축</li>
+          <li>경영자용 인증 리스크 현황판</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ★ 04 — 산출물 항목·설명·태그 수정 여기 -->
+<section id="deliverables">
+  <div class="wrap">
+    <div class="sh fi">
+      <span class="sh-n">04</span>
+      <h2 class="sh-t">8주 안에<br>실제로 납품할 것들</h2>
+    </div>
+    <div class="dlv-list fi">
+      <div class="dlv">
+        <div class="dlv-n">01</div>
+        <div>
+          <div class="dlv-t">CE 인증 진행 관리 대시보드</div>
+          <div class="dlv-d">인증 단계별 문서 상태, 담당자·마감일·병목 구간을 한 화면에서 관리합니다. M사 RA팀이 실제로 매일 사용하는 운영 도구입니다.</div>
+          <div class="dtags"><span class="dtag">React / Next.js</span><span class="dtag">Vercel 배포</span><span class="dtag">실시간 상태 추적</span><span class="dtag">마감일 알림</span></div>
+        </div>
+      </div>
+      <div class="dlv">
+        <div class="dlv-n">02</div>
+        <div>
+          <div class="dlv-t">AI 규제 검색 Copilot</div>
+          <div class="dlv-d">MDR·MDCG 가이던스에 자연어로 질의하면 근거 법령 원문 링크와 함께 답변합니다. RAG 파이프라인 기반으로 환각을 최소화합니다.</div>
+          <div class="dtags"><span class="dtag">RAG Pipeline</span><span class="dtag">Vector DB</span><span class="dtag">LLM API</span><span class="dtag">근거 원문 링크</span></div>
+        </div>
+      </div>
+      <div class="dlv">
+        <div class="dlv-n">03</div>
+        <div>
+          <div class="dlv-t">경영자용 인증 리스크 현황판</div>
+          <div class="dlv-d">만료 예정 인증, 보완 진행 중인 항목, 병목 문서를 경영자가 한눈에 파악할 수 있는 뷰입니다. M사 대표가 실제로 볼 화면입니다.</div>
+          <div class="dtags"><span class="dtag">경영자 뷰</span><span class="dtag">리스크 시각화</span><span class="dtag">만료 예정 알림</span></div>
+        </div>
+      </div>
+      <div class="dlv">
+        <div class="dlv-n">04</div>
+        <div>
+          <div class="dlv-t">CE 규제 문서 지식베이스</div>
+          <div class="dlv-d">M사 보유 CE 문서·MDR 가이던스·심사 이력을 정리·태깅·벡터화합니다. AI Copilot의 학습 기반이 되는 구조화된 지식 자산입니다.</div>
+          <div class="dtags"><span class="dtag">문서 정리·태깅</span><span class="dtag">벡터 임베딩</span><span class="dtag">검색 가능화</span></div>
+        </div>
+      </div>
+      <div class="dlv">
+        <div class="dlv-n">05</div>
+        <div>
+          <div class="dlv-t">운영 매뉴얼 + 데모 영상</div>
+          <div class="dlv-d">M사 담당자가 혼자 문서를 추가하고 시스템을 유지할 수 있는 운영 매뉴얼, 그리고 팀 포트폴리오용 데모 영상을 납품합니다.</div>
+          <div class="dtags"><span class="dtag">운영 매뉴얼</span><span class="dtag">데모 영상</span><span class="dtag">포트폴리오 공개 가능</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ★ 05 — 문제 정의 섹션 수정 여기 -->
+<section id="define">
+  <div class="wrap">
+    <div class="sh fi">
+      <span class="sh-n">05</span>
+      <h2 class="sh-t">클라이언트가 요청한 것이<br>최선의 답이 아닐 수 있습니다</h2>
+    </div>
+    <div class="define-hero fi">
+      <h3>이 팀은 요청사항을 구현하는 팀이 아닙니다.<br>진짜 문제를 함께 정의하는 팀입니다.</h3>
+      <p>클라이언트는 현장을 가장 잘 아는 사람이지만, 최선의 해결책을 아는 사람은 아닙니다.
+      우리는 M사 담당자 인터뷰와 실제 업무 관찰을 통해 진짜 병목이 어디인지 직접 찾아냅니다.
+      그리고 거기서부터 제품을 설계합니다.</p>
+    </div>
+    <div class="grid2 fi">
+      <div class="col-card">
+        <h4>이미 확보된 것</h4>
+        <ul>
+          <li>실제 클라이언트 (M사)</li>
+          <li>확정 예산 (500만원)</li>
+          <li>의공학 전공 도메인 지식</li>
+          <li>CE·MDR 인허가 업무 이해</li>
+          <li>PM·클라이언트 커뮤니케이션 역할</li>
+        </ul>
+      </div>
+      <div class="col-card hi">
+        <h4>팀이 함께 만들 것</h4>
+        <ul>
+          <li>진짜 Pain Point 정의 (인터뷰 기반)</li>
+          <li>제품 핵심 가설 수립</li>
+          <li>탐색하고 기각할 방향들</li>
+          <li>AI가 개입할 최적 지점 결정</li>
+          <li>최선의 사용자 경험 구조</li>
+        </ul>
+      </div>
+    </div>
+    <div class="fi" style="margin-top:14px;padding:22px 24px;background:var(--bg2);border-radius:var(--r);border:1px solid var(--border);">
+      <p style="font-size:13px;color:var(--ink2);line-height:1.8;">
+        <strong style="color:var(--ink);">참고.</strong>
+        같은 학회에서 진행된 보험 AI 프로젝트(Track B-3)는 단순 챗봇을 만든 것이 아니라,
+        <em>"진단과 판매의 미분리"</em>라는 구조적 원인을 직접 정의하고
+        7개 방향을 탐색·기각한 뒤 결정론적 리스크 진단 시스템으로 수렴했습니다.
+        이 프로젝트도 같은 방식으로 접근합니다.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ★ 06 — 타임라인 수정 여기 -->
+<section id="roadmap">
+  <div class="wrap">
+    <div class="sh fi">
+      <span class="sh-n">06</span>
+      <h2 class="sh-t">일정이 있는 프로젝트는<br>진짜 프로젝트입니다</h2>
+    </div>
+    <div class="tl fi">
+      <div class="tl-row on">
+        <div class="tl-week">1–2주</div>
+        <div><div class="tl-t">킥오프 · 문제 정의</div><div class="tl-d">M사 담당자 인터뷰, 실제 Pain Point 정의, 와이어프레임 설계, 기술 스택 확정, 계약 체결</div></div>
+      </div>
+      <div class="tl-row on">
+        <div class="tl-week">3–4주</div>
+        <div><div class="tl-t">대시보드 핵심 개발</div><div class="tl-d">CE 인증 관리 대시보드 개발, 규제 문서 수집·정리·태깅 착수, M사 1차 피드백</div></div>
+      </div>
+      <div class="tl-row on">
+        <div class="tl-week">5–6주</div>
+        <div><div class="tl-t">AI 기능 통합</div><div class="tl-d">RAG 파이프라인 구축, 벡터 DB 완성, AI 규제 검색 탭 개발, M사 담당자 1차 테스트</div></div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-week">7주</div>
+        <div><div class="tl-t">검수 · 수정</div><div class="tl-d">M사 RA 담당자 실사용 테스트, 피드백 반영, 배포 완료</div></div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-week">8주</div>
+        <div><div class="tl-t">납품 · 마무리</div><div class="tl-d">최종 납품 (웹앱 URL · 운영 매뉴얼 · 지식베이스 · 데모 영상), 검수 및 정산</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ★ 07 — KPI 수정 여기 -->
+<section id="kpi">
+  <div class="wrap">
+    <div class="sh fi">
+      <span class="sh-n">07</span>
+      <h2 class="sh-t">우리가 달성할 기준</h2>
+    </div>
+    <div class="kpi-grid fi">
+      <div class="kpi"><div class="kpi-n">5개</div><div class="kpi-l">납품 산출물<br>명확하게 확정</div></div>
+      <div class="kpi"><div class="kpi-n">3명+</div><div class="kpi-l">M사 실무자<br>실사용 검증</div></div>
+      <div class="kpi"><div class="kpi-n">8주</div><div class="kpi-l">확정 납품<br>일정</div></div>
+      <div class="kpi"><div class="kpi-n">500만</div><div class="kpi-l">확정 예산<br>(원)</div></div>
+      <div class="kpi"><div class="kpi-n">90%+</div><div class="kpi-l">규제 Q&A<br>유용성 기준</div></div>
+      <div class="kpi"><div class="kpi-n">공개</div><div class="kpi-l">포트폴리오<br>활용 가능</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ★ 08 — 팀 모집·운영 구조 수정 여기 -->
+<section id="team">
+  <div class="wrap">
+    <div class="sh fi">
+      <span class="sh-n">08</span>
+      <h2 class="sh-t">이미 확보된 것,<br>지금 필요한 것</h2>
+    </div>
+    <div class="hn fi">
+      <div class="hn-c have">
+        <div class="hn-lbl">이미 있습니다</div>
+        <ul>
+          <li>실제 클라이언트 (M사)</li>
+          <li>확정 예산 500만원</li>
+          <li>의공학 전공 도메인 지식</li>
+          <li>CE·MDR 인허가 업무 이해</li>
+          <li>PM·클라이언트 커뮤니케이션</li>
+          <li>문제 정의 주도</li>
+        </ul>
+      </div>
+      <div class="hn-c need">
+        <div class="hn-lbl">함께할 분을 찾습니다</div>
+        <ul>
+          <li>웹앱을 실제로 만드는 개발자</li>
+          <li>RAG · AI 파이프라인 구현 가능한 분</li>
+          <li>사용자 경험을 설계하는 분</li>
+          <li>복잡한 규제 산업 문제에 흥미 있는 분</li>
+        </ul>
+      </div>
+    </div>
+    <div class="roles fi">
+      <div class="role on">
+        <span class="rbadge">확정</span>
+        <div class="role-t">PM · 도메인 · 클라이언트</div>
+        <div class="role-d">M사 커뮤니케이션, 요구사항 정의, 의료기기 RA 도메인 지식, 문제 정의 주도, 발표·검수</div>
+      </div>
+      <div class="role">
+        <span class="rbadge">모집 중</span>
+        <div class="role-t">풀스택 개발자</div>
+        <div class="role-d">React/Next.js 웹앱 개발 주도. Vercel 배포. 백엔드 API 연결.</div>
+      </div>
+      <div class="role">
+        <span class="rbadge">모집 중</span>
+        <div class="role-t">AI · LLM 엔지니어</div>
+        <div class="role-d">RAG 파이프라인, 벡터 DB, 규제 검색 Copilot 구현. 환각 방지 설계.</div>
+      </div>
+      <div class="role">
+        <span class="rbadge">모집 중</span>
+        <div class="role-t">UX · 데이터 (선택)</div>
+        <div class="role-d">화면 설계, 규제 문서 정리·태깅, 사용성 테스트, 발표 자료.</div>
+      </div>
+    </div>
+    <div class="fi" style="margin-top:24px;">
+      <p style="font-size:13px;color:var(--ink2);margin-bottom:12px;font-weight:500;">운영 구조</p>
+      <div class="ops">
+        <div class="op"><div class="op-t">주 1회 정기 미팅</div><div class="op-d">M사 담당자와 매주 진행 상황 공유 및 요구사항 확인</div></div>
+        <div class="op"><div class="op-t">데이터 접근 사전 확보</div><div class="op-d">킥오프 전 M사 내부 규제 문서 접근 권한 확정</div></div>
+        <div class="op"><div class="op-t">범위 변경 합의 프로세스</div><div class="op-d">추가 요청 발생 시 팀 전체 동의 후 반영</div></div>
+        <div class="op"><div class="op-t">포트폴리오 공개 허용</div><div class="op-d">납품 완료 후 팀원 전원 포트폴리오·학술 발표 활용 가능</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ★ CLOSING — 문구 수정 여기 -->
+<section style="border-top:none;padding-top:0;">
+  <div class="wrap">
+    <div class="closing fi">
+      <p class="closing-t">
+        규제 산업에 AI가 들어가는<br>
+        <em>첫 번째 장면을 같이 만듭니다.</em>
+      </p>
+      <p class="closing-sub">
+        실제 클라이언트, 실제 문제, 실제 일정이 있는 팀입니다.<br>
+        8주 후, 이 팀의 모든 팀원은 실제 납품 이력이 생깁니다.
+      </p>
+      <!-- ★ 합류 문의 이메일 수정 여기 -->
+      <a href="mailto:contact@example.com" class="closing-btn">합류 문의하기 →</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span>Medical RA Copilot Project · M사 × 연세대학교 창업학회</span>
+  <span>2026 · 산학협력 교육 목적</span>
+</footer>
+
+<script>
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('on'); });
+}, { threshold: 0.10 });
+document.querySelectorAll('.fi').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>
